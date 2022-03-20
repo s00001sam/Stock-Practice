@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Stock Assignment</string>
+    <string name="get_data_error">取得資料異常</string>
+    <string name="title_name">商品</string>
+
+    <string-array name="title_array">
+        <item>成交價</item>
+        <item>漲跌</item>
+        <item>幅度</item>
+        <item>昨收價</item>
+        <item>更新時間</item>
+    </string-array>
+</resources>

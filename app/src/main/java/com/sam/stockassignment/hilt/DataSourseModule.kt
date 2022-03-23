@@ -5,6 +5,7 @@ import com.sam.stockassignment.repo.api.Api
 import com.sam.stockassignment.repo.datasource.DataSource
 import com.sam.stockassignment.repo.datasource.LocalDataSource
 import com.sam.stockassignment.repo.datasource.RemoteDataSource
+import com.sam.stockassignment.room.RoomDB
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,8 +19,8 @@ class DataSourseModule {
     @Singleton
     @LocalData
     @Provides
-    fun providerLocalDataSource(): DataSource {
-        return LocalDataSource()
+    fun providerLocalDataSource(roomDB: RoomDB): DataSource {
+        return LocalDataSource(roomDB)
     }
 
     @Singleton

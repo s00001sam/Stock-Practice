@@ -1,13 +1,17 @@
 package com.sam.stockassignment.data
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.sam.stockassignment.util.Util.getTimeStr
 import com.sam.stockassignment.util.to2fString
 import kotlinx.parcelize.Parcelize
 
-
+@Entity(tableName = "stock_table")
 @Parcelize
 data class StockLocalData (
+    @PrimaryKey(autoGenerate = true)
+    var roomId: Int = 0,
     var id: String = "",
     var name: String = "",
     var yesterdayPrice: Double = 0.0,

@@ -41,11 +41,9 @@ class StockView @JvmOverloads constructor (
             override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                 when (e.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        Logger.d("sam00 down=${e.y}")
                         touchY = e.y
                     }
                     MotionEvent.ACTION_MOVE -> {
-                        Logger.d("sam00 move=${e.y} down=${touchY}")
                         if (abs(e.y - touchY) > 10f) {
                             rv.parent.requestDisallowInterceptTouchEvent(true)
                         }

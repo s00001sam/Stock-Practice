@@ -1,5 +1,6 @@
 package com.sam.stockassignment.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
 import android.view.animation.Animation
@@ -18,6 +19,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun <T> Flow<T>.collectFlow(lifecycleOwner: LifecycleOwner, doSomething:((t: T)-> Unit)) {
     this.onEach {
@@ -51,7 +54,8 @@ fun StockWholeData?.toStockLocalDatas(): List<StockLocalData>? {
     if (this?.data.isNullOrEmpty()) return null
     return this?.data?.map {
         StockLocalData(
-            it?.get(0) ?: "", it?.get(1) ?: "", it?.get(7).changeDouble(), it?.get(7).changeDouble()
+            id = it?.get(0) ?: "", name = it?.get(1) ?: "",
+            yesterdayPrice = it?.get(7).changeDouble(), currentPrice = it?.get(7).changeDouble()
         )
     }
 }
@@ -79,4 +83,12 @@ fun View.startFlicker() {
         }
     })
     this.startAnimation(anim)
+}
+
+@SuppressLint("SimpleDateFormat")
+fun Long.toYrMonDayStr(): String {
+    val c = Calendar.getInstance()
+    c.timeInMillis = this
+    val fr = SimpleDateFormat("yyyy-MM-dd")
+    return fr.format(c.time)
 }

@@ -8,8 +8,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDialogFragment
 import com.sam.stockassignment.databinding.ActivityMainBinding
 import com.sam.stockassignment.util.PriceManager
+import com.sam.stockassignment.util.SpUtil
+import com.sam.stockassignment.util.SpUtil.KEY_STOCKS
 import com.sam.stockassignment.util.Util.showToast
 import com.sam.stockassignment.util.collectFlow
+import com.sam.stockassignment.util.toYrMonDayStr
 import com.sam.stockassignment.view.loading.LoadingDialog
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         binding.viewModel = viewModel
         initView()
         initData()
-        collectFlows()
+        collectFlowsOrObserve()
     }
 
     private fun initData() {
@@ -58,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun collectFlows() {
+    private fun collectFlowsOrObserve() {
         viewModel.apiStockResult.collectFlow(this) {
             if (it.isLoading()) showLoading() else dismissLoading()
             if (it.isSuccess()) {
@@ -77,6 +80,21 @@ class MainActivity : AppCompatActivity() {
             if (isNeed) {
                 startTimer()
                 viewModel.triggerTimerComplete()
+            }
+        }
+
+        viewModel.dbStocks.observe(this) {
+            if (viewModel.hasGetDB) return@observe
+            viewModel.completeGetDB()
+            //資料為空 或 當天還沒有拿過資料
+            if (it.isNullOrEmpty() || SpUtil.getString(KEY_STOCKS) != System.currentTimeMillis().toYrMonDayStr()) {
+                viewModel.getStocks()
+                return@observe
+            }
+            PriceManager.defaultStockIds?.let { ids ->
+                val newList = it.filter { stock-> ids.contains(stock.id) }
+                PriceManager.currentStocks = newList
+                viewModel.triggerTimer()
             }
         }
     }

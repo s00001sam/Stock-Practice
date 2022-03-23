@@ -29,7 +29,6 @@ class StockDataAdapter() : ListAdapter<StockLocalData, StockDataAdapter.ViewHold
             if (redList.contains(adapterPosition)) {
                 adapter.setNeedRed(true)
                 redList.remove(adapterPosition)
-                Logger.d("sam00 data redList=$redList")
             } else {
                 adapter.setNeedRed(false)
             }

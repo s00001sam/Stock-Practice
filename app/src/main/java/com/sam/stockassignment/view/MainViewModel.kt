@@ -6,9 +6,13 @@ import com.sam.stockassignment.MyApplication
 import com.sam.stockassignment.R
 import com.sam.stockassignment.data.State
 import com.sam.stockassignment.data.StockLocalData
+import com.sam.stockassignment.repo.Repository
 import com.sam.stockassignment.repo.usecase.GetStocks
 import com.sam.stockassignment.util.Logger
+import com.sam.stockassignment.util.SpUtil
+import com.sam.stockassignment.util.SpUtil.KEY_STOCKS
 import com.sam.stockassignment.util.toStockLocalDatas
+import com.sam.stockassignment.util.toYrMonDayStr
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,6 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    private val repository: Repository,
     private val getStocks: GetStocks
 ): ViewModel() {
 
@@ -27,8 +32,12 @@ class MainViewModel @Inject constructor(
     private val _needTimer = MutableStateFlow<Boolean>(false)
     val needTimer: StateFlow<Boolean> = _needTimer
 
-    init {
-        getStocks()
+    var hasGetDB = false
+
+    val dbStocks = repository.getAll()
+
+    fun completeGetDB() {
+        hasGetDB = true
     }
 
     fun getStocks() {
@@ -38,7 +47,10 @@ class MainViewModel @Inject constructor(
                     .onStart { _apiStockResult.value = State.loading() }
                     .collect {
                         if (it?.isSuccess() == true && it.data != null) {
-                            _apiStockResult.value = State.success(it.toStockLocalDatas())
+                            val localStocks = it.toStockLocalDatas()
+                            _apiStockResult.value = State.success(localStocks)
+                            repository.insertStocks(localStocks ?: listOf())
+                            SpUtil.putString(KEY_STOCKS, System.currentTimeMillis().toYrMonDayStr())
                         } else {
                             _apiStockResult.value = State.error(MyApplication.appContext.getString(R.string.get_data_error))
                         }

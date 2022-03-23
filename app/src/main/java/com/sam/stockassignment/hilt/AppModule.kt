@@ -1,15 +1,18 @@
 package com.sam.stockassignment.hilt
 
+import android.content.Context
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.sam.stockassignment.repo.BaseRepository
 import com.sam.stockassignment.repo.Repository
 import com.sam.stockassignment.repo.api.Api
 import com.sam.stockassignment.repo.datasource.DataSource
+import com.sam.stockassignment.room.RoomDB
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -46,6 +49,10 @@ class AppModule {
     @Singleton
     @Provides
     fun provideApi(retrofit: Retrofit): Api = retrofit.create(Api::class.java)
+
+    @Singleton
+    @Provides
+    fun provideRoomDB(@ApplicationContext context: Context) = RoomDB.getInstance(context)
 
     @Singleton
     @Provides

@@ -30,8 +30,8 @@ class StockDataItemAdapter() : ListAdapter<String, StockDataItemAdapter.ViewHold
         RecyclerView.ViewHolder(binding.root) {
         fun bind(name: String, quote: Double, needRed: Boolean) {
             val color = when {
-                quote > 0.0 -> R.color.green
-                quote < 0.0 -> R.color.red
+                quote > 0.0 -> R.color.red
+                quote < 0.0 -> R.color.green
                 else -> R.color.white
             }
             binding.tvName.setTextColor(ContextCompat.getColor(binding.root.context, color))

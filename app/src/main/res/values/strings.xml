@@ -2,6 +2,12 @@
     <string name="app_name">Stock Assignment</string>
     <string name="get_data_error">取得資料異常</string>
     <string name="title_name">商品</string>
+    <string name="title_edit">設定</string>
+    <string name="confirm">確定</string>
+    <string name="interval_time">間隔時間</string>
+    <string name="show_red">顯示紅線</string>
+    <string name="interval_enter_error">間距設定錯誤</string>
+    <string name="stock">Stock</string>
 
     <string-array name="title_array">
         <item>成交價</item>

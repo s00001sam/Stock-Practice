@@ -11,6 +11,7 @@ object PriceManager {
     var randomNums : List<Int> = listOf()
 
     var interval: Long = 1000L
+    var isShowRed: Boolean = true
 
     fun randomUpdateStocks() {
         randomNums = getRandomList()

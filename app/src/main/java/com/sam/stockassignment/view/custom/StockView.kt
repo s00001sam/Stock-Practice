@@ -44,7 +44,7 @@ class StockView @JvmOverloads constructor (
                         touchY = e.y
                     }
                     MotionEvent.ACTION_MOVE -> {
-                        if (abs(e.y - touchY) > 10f) {
+                        if (abs(e.y - touchY) > 8f) {
                             rv.parent.requestDisallowInterceptTouchEvent(true)
                         }
                     }

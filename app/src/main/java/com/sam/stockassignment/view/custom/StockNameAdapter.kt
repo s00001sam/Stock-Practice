@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sam.stockassignment.databinding.ItemStockNameBinding
 import com.sam.stockassignment.util.Logger
+import com.sam.stockassignment.util.PriceManager
 import com.sam.stockassignment.util.startFlicker
 
 class StockNameAdapter() : ListAdapter<String, StockNameAdapter.ViewHolder>(DiffCallback) {
@@ -22,12 +23,12 @@ class StockNameAdapter() : ListAdapter<String, StockNameAdapter.ViewHolder>(Diff
         RecyclerView.ViewHolder(binding.root) {
         fun bind(name: String, redList: MutableList<Int>) {
             binding.name = name
-            if (redList.contains(adapterPosition)) {
+            if (redList.contains(adapterPosition) && PriceManager.isShowRed) {
                 binding.vRed.startFlicker()
-                redList.remove(adapterPosition)
             } else {
                 binding.vRed.isVisible = false
             }
+            redList.remove(adapterPosition)
 
             binding.executePendingBindings()
         }

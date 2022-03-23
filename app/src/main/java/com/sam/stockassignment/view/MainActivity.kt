@@ -13,6 +13,7 @@ import com.sam.stockassignment.util.SpUtil.KEY_STOCKS
 import com.sam.stockassignment.util.Util.showToast
 import com.sam.stockassignment.util.collectFlow
 import com.sam.stockassignment.util.toYrMonDayStr
+import com.sam.stockassignment.view.edit.EditDialog
 import com.sam.stockassignment.view.loading.LoadingDialog
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -58,7 +59,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-
+        binding.ivEdit.setOnClickListener {
+            EditDialog.show(supportFragmentManager)
+        }
     }
 
     private fun collectFlowsOrObserve() {
@@ -86,8 +89,9 @@ class MainActivity : AppCompatActivity() {
         viewModel.dbStocks.observe(this) {
             if (viewModel.hasGetDB) return@observe
             viewModel.completeGetDB()
-            //資料為空 或 當天還沒有拿過資料
-            if (it.isNullOrEmpty() || SpUtil.getString(KEY_STOCKS) != System.currentTimeMillis().toYrMonDayStr()) {
+
+            val today = System.currentTimeMillis().toYrMonDayStr()
+            if (it.isNullOrEmpty() || SpUtil.getString(KEY_STOCKS) != today) { //資料為空 或 當天還沒有拿過資料
                 viewModel.getStocks()
                 return@observe
             }

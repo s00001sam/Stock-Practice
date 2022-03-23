@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sam.stockassignment.R
 import com.sam.stockassignment.databinding.ItemStockNameBinding
+import com.sam.stockassignment.util.PriceManager
 import com.sam.stockassignment.util.startFlicker
 
 class StockDataItemAdapter() : ListAdapter<String, StockDataItemAdapter.ViewHolder>(DiffCallback) {
@@ -36,7 +37,7 @@ class StockDataItemAdapter() : ListAdapter<String, StockDataItemAdapter.ViewHold
             binding.tvName.setTextColor(ContextCompat.getColor(binding.root.context, color))
             binding.name = name
 
-            if (needRed) {
+            if (needRed && PriceManager.isShowRed) {
                 binding.vRed.startFlicker()
             } else {
                 binding.vRed.isVisible = false

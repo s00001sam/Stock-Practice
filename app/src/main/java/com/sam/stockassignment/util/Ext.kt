@@ -1,10 +1,16 @@
 package com.sam.stockassignment.util
 
 import android.content.Context
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.sam.stockassignment.MyApplication
+import com.sam.stockassignment.R
 import com.sam.stockassignment.data.StockLocalData
 import com.sam.stockassignment.data.StockWholeData
 import dagger.hilt.android.internal.managers.ViewComponentManager
@@ -61,3 +67,16 @@ fun String?.changeDouble() : Double {
 }
 
 fun Double.to2fString() = String.format("%.2f", this)
+
+fun View.startFlicker() {
+    isVisible = true
+    val anim = AnimationUtils.loadAnimation(MyApplication.appContext, R.anim.an_flicker)
+    anim.setAnimationListener(object : Animation.AnimationListener {
+        override fun onAnimationStart(p0: Animation?) {}
+        override fun onAnimationRepeat(p0: Animation?) {}
+        override fun onAnimationEnd(p0: Animation?) {
+            isVisible = false
+        }
+    })
+    this.startAnimation(anim)
+}

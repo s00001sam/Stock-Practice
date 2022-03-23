@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface Api {
 
-    @GET("STOCK_DAY_ALL")
+    @GET("exchangeReport/STOCK_DAY_ALL")
     suspend fun getStocks(
         @Query("response") response: String? = "json"
     ): StockWholeData?

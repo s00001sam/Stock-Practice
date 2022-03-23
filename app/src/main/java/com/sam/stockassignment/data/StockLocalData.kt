@@ -5,6 +5,7 @@ import com.sam.stockassignment.util.Util.getTimeStr
 import com.sam.stockassignment.util.to2fString
 import kotlinx.parcelize.Parcelize
 
+
 @Parcelize
 data class StockLocalData (
     var id: String = "",

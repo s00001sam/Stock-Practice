@@ -7,16 +7,16 @@ import kotlin.random.Random
 object PriceManager {
 
     var defaultStockIds : List<String>? = null
-
     var currentStocks: List<StockLocalData> = listOf()
+    var randomNums : List<Int> = listOf()
 
-    var interval: Long = 2000L
+    var interval: Long = 1000L
 
     fun randomUpdateStocks() {
-        val changeIndexs = getRandomList()
+        randomNums = getRandomList()
         currentStocks.apply {
             mapIndexed { index, stockLocalData ->
-                if (changeIndexs.contains(index)) {
+                if (randomNums.contains(index)) {
                     stockLocalData.updateTime = System.currentTimeMillis()
                     stockLocalData.currentPrice = stockLocalData.yesterdayPrice.getRandomPrice()
                 }

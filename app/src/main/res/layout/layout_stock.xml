@@ -27,13 +27,15 @@
             app:layout_constraintEnd_toEndOf="@+id/tv_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
-            tools:listitem="@layout/item_stock_name" />
+            tools:listitem="@layout/item_stock_name"
+            android:overScrollMode="never"/>
 
         <HorizontalScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scrollbars="none"
+            android:overScrollMode="never"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_title"
@@ -41,7 +43,10 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:descendantFocusability="beforeDescendants">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcy_title"
@@ -51,7 +56,8 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:itemCount="6"
-                    tools:listitem="@layout/item_title" />
+                    tools:listitem="@layout/item_title"
+                    android:overScrollMode="never"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcy_data"
@@ -61,7 +67,8 @@
                     android:orientation="vertical"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:itemCount="50"
-                    tools:listitem="@layout/item_data" />
+                    tools:listitem="@layout/item_data"
+                    android:overScrollMode="never"/>
 
             </RelativeLayout>
 

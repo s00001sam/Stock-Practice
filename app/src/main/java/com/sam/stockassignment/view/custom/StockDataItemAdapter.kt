@@ -4,15 +4,18 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sam.stockassignment.R
 import com.sam.stockassignment.databinding.ItemStockNameBinding
+import com.sam.stockassignment.util.startFlicker
 
 class StockDataItemAdapter() : ListAdapter<String, StockDataItemAdapter.ViewHolder>(DiffCallback) {
 
     private var quote: Double = 0.0
+    private var needRed: Boolean = false
 
     fun setQuote(quote: Double) {
         this.quote = quote
@@ -24,7 +27,7 @@ class StockDataItemAdapter() : ListAdapter<String, StockDataItemAdapter.ViewHold
 
     class ViewHolder(private val binding: ItemStockNameBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(name: String, quote: Double) {
+        fun bind(name: String, quote: Double, needRed: Boolean) {
             val color = when {
                 quote > 0.0 -> R.color.green
                 quote < 0.0 -> R.color.red
@@ -32,6 +35,12 @@ class StockDataItemAdapter() : ListAdapter<String, StockDataItemAdapter.ViewHold
             }
             binding.tvName.setTextColor(ContextCompat.getColor(binding.root.context, color))
             binding.name = name
+
+            if (needRed) {
+                binding.vRed.startFlicker()
+            } else {
+                binding.vRed.isVisible = false
+            }
             binding.executePendingBindings()
         }
 
@@ -57,6 +66,10 @@ class StockDataItemAdapter() : ListAdapter<String, StockDataItemAdapter.ViewHold
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val name = getItem(position)
-        holder.bind(name, quote)
+        holder.bind(name, quote, needRed)
+    }
+
+    fun setNeedRed(isNeed: Boolean) {
+        needRed = isNeed
     }
 }

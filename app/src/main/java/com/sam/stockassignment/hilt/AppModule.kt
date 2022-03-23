@@ -20,7 +20,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 class AppModule {
-    private val API_URL = "https://www.twse.com.tw/exchangeReport/"
+    private val API_URL = "https://www.twse.com.tw/"
 
     @Singleton
     @Provides

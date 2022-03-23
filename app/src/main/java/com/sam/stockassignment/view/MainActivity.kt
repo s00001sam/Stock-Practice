@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val updateTextTask = object : Runnable {
         override fun run() {
             PriceManager.randomUpdateStocks()
-            binding.stockView.setDataToView(PriceManager.currentStocks)
+            binding.stockView.setDataToView(PriceManager.currentStocks, PriceManager.randomNums)
             mainHandler.postDelayed(this, PriceManager.interval)
         }
     }

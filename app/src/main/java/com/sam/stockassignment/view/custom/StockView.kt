@@ -3,20 +3,19 @@ package com.sam.stockassignment.view.custom
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
 import com.sam.stockassignment.R
 import com.sam.stockassignment.data.StockLocalData
 import com.sam.stockassignment.databinding.LayoutStockBinding
-import com.sam.stockassignment.util.Logger
+import com.sam.stockassignment.view.helper.DataItemTouchListener
 import com.sam.stockassignment.view.helper.SyncRecyclerViewHelper
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.reflect.Field
 import javax.inject.Inject
-import kotlin.math.abs
 
 
 @AndroidEntryPoint
@@ -36,27 +35,6 @@ class StockView @JvmOverloads constructor (
     private val titleAdapter: StockTitleAdapter by lazy { StockTitleAdapter() }
     private val dataAdapter: StockDataAdapter by lazy { StockDataAdapter() }
 
-    private val rcyOnItemTouch: OnItemTouchListener by lazy {
-        object : OnItemTouchListener {
-            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                when (e.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        touchY = e.y
-                    }
-                    MotionEvent.ACTION_MOVE -> {
-                        if (abs(e.y - touchY) > 8f) {
-                            rv.parent.requestDisallowInterceptTouchEvent(true)
-                        }
-                    }
-                    MotionEvent.ACTION_UP -> rv.clearFocus()
-                }
-                return false
-            }
-            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
-            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
-        }
-    }
-
     init {
         initView()
     }
@@ -64,13 +42,26 @@ class StockView @JvmOverloads constructor (
     private fun initView() {
         syncRecyclerViewHelper.setRecyclerViews(listOf(binding.rcyName, binding.rcyData))
         binding.rcyData.isNestedScrollingEnabled = false
-        binding.rcyData.addOnItemTouchListener(rcyOnItemTouch)
+        binding.rcyData.addOnItemTouchListener(DataItemTouchListener())
         binding.rcyName.adapter = nameAdapter
         binding.rcyData.adapter = dataAdapter
+        improveRecyckerViewSensitivity()
 
         val titleList = resources.getStringArray(R.array.title_array).toList()
         binding.rcyTitle.adapter = titleAdapter
         titleAdapter.submitList(titleList)
+    }
+
+    private fun improveRecyckerViewSensitivity() {
+        try {
+            val recyclerView = binding.rcyData
+            val touchSlopField: Field = RecyclerView::class.java.getDeclaredField("mTouchSlop")
+            touchSlopField.isAccessible = true
+            val touchSlop = touchSlopField.get(recyclerView) as Int
+            touchSlopField.set(recyclerView, touchSlop * 0.1f)
+        } catch (e: Exception) {
+            Log.d("sam","improveRecyckerViewSensitivity e=${e.message}")
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
